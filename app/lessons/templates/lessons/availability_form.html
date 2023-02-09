@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+
+
+{% block content %}
+<datalist id='time'>
+    <option value="08:00"></option>
+    <option value="09:00"></option>
+    <option value="10:00"></option>
+    <option value="11:00"></option>
+    <option value="12:00"></option>
+    <option value="13:00"></option>
+    <option value="14:00"></option>
+    <option value="15:00"></option>
+    <option value="16:00"></option>
+    <option value="17:00"></option>
+    <option value="18:00"></option>
+    <option value="19:00"></option>
+    <option value="20:00"></option>
+</datalist>
+
+<div class="fs-1" style="text-align: center; margin-bottom:20px">Add a new lesson</div>
+
+<div class="container border shadow border-primary rounded p-4 pt-5 " style="width: 40%">
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text" id="basic-addon1">Date</span>
+        {{ form.date }}
+        </div>
+        <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text" id="basic-addon1">Date</span>
+        {{ form.time }}
+        </div>
+        <div style="text-align: center">
+            <input type="submit" value="Add" class='btn btn-primary', style='width: 30%'>
+        </div>
+    </form>
+</div>
+
+{% endblock  %}

@@ -9,18 +9,19 @@ class Test(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, name, email, password=None):
+    def create_user(self, name, is_teacher=False, email=None, password=None):
         if not name:
             raise ValueError('Users must have a name')
         user = self.model(
             name=name,
-            email=email
+            email=email,
+            is_teacher=is_teacher
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, name, email, password):
+    def create_superuser(self, name, password, is_teacher=False, email=None):
         user = self.create_user(
             name=name,
             email=email,
@@ -44,3 +45,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'name'
+
+
+class Availability(models.Model):
+    teacher = models.ForeignKey(
+        User, on_delete=models.CASCADE, limit_choices_to={'is_teacher': True}, related_name='teacher')
+    student = models.ForeignKey(
+        User, on_delete=models.CASCADE, limit_choices_to={'is_teacher': False}, related_name='student', null=True, blank=True)
+    date = models.DateField()
+    time = models.TimeField()
+    is_booked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.teacher.name} {self.date} {self.time}"
