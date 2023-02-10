@@ -1,5 +1,5 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
-                                        PermissionsMixin)
+                                        Permission, PermissionsMixin)
 from django.db import models
 
 
@@ -19,6 +19,12 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+        if is_teacher:
+            permission = Permission.objects.get(name='Post a new lesson')
+            user.user_permissions.add(permission)
+        else:
+            permission = Permission.objects.get(name='Join a lesson')
+            user.user_permissions.add(permission)
         return user
 
     def create_superuser(self, name, password, is_teacher=False, email=None):
@@ -58,3 +64,9 @@ class Availability(models.Model):
 
     def __str__(self):
         return f"{self.teacher.name} {self.date} {self.time}"
+
+    class Meta:
+        permissions = [
+            ("add", "Post a new lesson"),
+            ("join", "Join a lesson"),
+        ]

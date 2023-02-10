@@ -1,9 +1,31 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="container">
-    <a href={% url 'lessons:add' %}>Post new lesson</a>
+<div class="container border shadow border-primary rounded p-4 pt-3 w-50">
+    
+    {% if user.is_authenticated %}
+    <div style="display: flex; justify-content: center; align-items: center;" class="mb-3 mt-2">
+        <a class="btn btn-md btn-outline-primary w-25" href="{% url 'lessons:booked' %}">My lessons</a>
+    </div>
+    
 
+    {% if user.is_teacher %}
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <a class="btn btn-md btn-outline-primary w-25" href="{% url 'lessons:add' %}">Post new lesson</a>
+    </div>
+    
+    {% else %}
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <a class="btn btn-md btn-outline-primary w-25" href="{% url 'lessons:list' %}">Join a lesson</a>
+    </div>
+
+    {% endif %}
+    {% else %}
+    <div class="fs-5" style="text-align: center;">Please login.</div>
+
+    {% endif %}
 </div>
 
 {% endblock  %}

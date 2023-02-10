@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container border shadow border-primary rounded p-4 pt-3 w-50">
+
+    <table class="table ">
+        <thead>
+          <tr>
+            <th scope="col">Teacher</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            {% if user.is_teacher %}
+                <th scope="col" style="text-align: center">
+                    Booked
+                </th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+            {% for lesson in lesson_list %}
+            <tr>
+            <td>
+                {{lesson.teacher}}
+            </td>    
+            <td>
+                {{lesson.date}}
+            </td>    
+            <td>
+                {{lesson.time}}
+            </td>
+
+            {% if user.is_teacher %}
+                <td style="text-align: center">
+                    {% if lesson.is_booked %}
+                    <span style="color: #00ff00;">&#10003</span>
+                    {% else %}
+                    <span style="color: red;">&#10005</span>
+                    {% endif %}              
+                </td>
+            {% endif %} 
+
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      {% if lesson_list|length < 3 %}
+        <div style="display: flex; justify-content: center; align-items: center;" class="m-2">
+            <a class="btn btn-sm btn-outline-primary" href={% url 'lessons:list' %}>Book another lesson</a>
+        </div>
+      {% endif %}
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'core:home' %}">Go back</a>
+        </div>
+
+    <ul class="list-group">
+        
+    </ul>
+
+</div>
+
+{% endblock content %}

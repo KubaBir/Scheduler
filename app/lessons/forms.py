@@ -2,7 +2,7 @@ from core.models import Availability
 from django import forms
 
 
-class LessonForm(forms.ModelForm):
+class CreateLessonForm(forms.ModelForm):
     class Meta:
         model = Availability
         fields = ['date', 'time']
@@ -10,3 +10,9 @@ class LessonForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date', 'id': 'date', 'class': 'form-control'}),
             'time': forms.TimeInput(attrs={'type': 'time', 'value': '08:00', 'list': 'time', 'class': 'form-control'})
         }
+
+
+class JoinLessonForm(forms.ModelForm):
+    class Meta:
+        model = Availability
+        fields = []
