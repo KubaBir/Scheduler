@@ -1,4 +1,5 @@
 from core.models import Availability
+from django.contrib import messages
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.db.models import Q
@@ -16,7 +17,12 @@ class AddAvailability(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('core:home')
     permission_required = 'core.add'
 
+    def form_invalid(self, form):
+        messages.error(self.request, "This lesson already exists.")
+        return super().form_invalid(form)
+
     def form_valid(self, form):
+        messages.success(self.request, "Lesson added succesfuly.")
         form.instance.teacher = self.request.user
         return super().form_valid(form)
 
@@ -34,7 +40,7 @@ class JoinLesson(UpdateView):
     model = Availability
     form_class = JoinLessonForm
     template_name = 'lessons/join.html'
-    success_url = reverse_lazy('core:home')
+    success_url = reverse_lazy('lessons:booked')
 
     def form_valid(self, form):
         form.instance.is_booked = True

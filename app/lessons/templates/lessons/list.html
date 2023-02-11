@@ -4,9 +4,6 @@
 <div class="container border shadow border-primary rounded p-4 pt-3 w-50">
     {% if lesson_list|length == 0 %}
     <div class="fs-5" style="text-align: center; margin-bottom:20px">There are no lessons available.</div>
-    <div style="display: flex; justify-content: center; align-items: center;">
-        <a class="btn btn-md btn-outline-primary" href="{% url 'core:home' %}">Go back</a>
-    </div>
     {% else %}
     
     <table class="table ">
@@ -15,18 +12,20 @@
             <th scope="col">Teacher</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
-            {% if user.is_teacher %}
-                <th scope="col" style="text-align: center">
-                    Booked
-                </th>
-            {% endif %}
+            <th scope="col" style="text-align: center">
+                {% if user.is_teacher %}
+                Booked
+                {% else %}
+                Join
+                {% endif %}
+            </th>
           </tr>
         </thead>
         <tbody>
             {% for lesson in lesson_list %}
             <tr>
             <td>
-                <a href="/lessons/join/{{lesson.id}}">{{lesson.teacher}}</a>
+                {{lesson.teacher}}
             </td>    
             <td>
                 {{lesson.date}}
@@ -43,6 +42,10 @@
                     <span style="color: red;">&#10005</span>
                     {% endif %}              
                 </td>
+            {% else %}
+                <td style="text-align: center">
+                    <a href="/lessons/join/{{lesson.id}}" class="fs-5 fw-bold text-decoration-none">&#10132;</a>    
+                </td>
             {% endif %}
 
             </tr>
@@ -51,6 +54,9 @@
       </table>
     
     {% endif %}
+    <div class="text-center">
+        <a class="btn btn-md btn-outline-primary" href="{% url 'core:home' %}">Go back</a>
+    </div>
 </div>
 
 {% endblock content %}

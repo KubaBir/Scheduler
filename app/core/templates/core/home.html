@@ -23,7 +23,9 @@
 
     {% endif %}
     {% else %}
-    <div class="fs-5" style="text-align: center;">Please login.</div>
+    <div class="fs-5" style="text-align: center;">
+        <a href={% url 'authentication:login' %}>Please login.</a>
+    </div>
 
     {% endif %}
 </div>
