@@ -13,9 +13,13 @@ class CreateLessonForm(forms.ModelForm):
             'time': forms.TimeInput(attrs={'type': 'time', 'value': '08:00', 'list': 'time', 'class': 'form-control'})
         }
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
-        if Availability.objects.filter(date=cleaned_data['date'], time=cleaned_data['time']).exists():
+        if Availability.objects.filter(date=cleaned_data['date'], time=cleaned_data['time'], teacher=self.request.user).exists():
             raise ValidationError(
                 "This lesson instance already exists", code="duplicate lesson")
         return cleaned_data

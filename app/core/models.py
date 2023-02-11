@@ -45,7 +45,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=255, unique=True, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
     is_teacher = models.BooleanField(default=False)
 
     objects = UserManager()
