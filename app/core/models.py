@@ -9,13 +9,14 @@ class Test(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, name, is_teacher=False, email=None, password=None):
+    def create_user(self, name, enable_reminders=False, is_teacher=False, email=None, password=None):
         if not name:
             raise ValueError('Users must have a name')
         user = self.model(
             name=name,
             email=email,
-            is_teacher=is_teacher
+            is_teacher=is_teacher,
+            enable_reminders=enable_reminders,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -25,9 +26,10 @@ class UserManager(BaseUserManager):
         else:
             permission = Permission.objects.get(name='Join a lesson')
             user.user_permissions.add(permission)
+
         return user
 
-    def create_superuser(self, name, password, is_teacher=False, email=None):
+    def create_superuser(self, name, password, enable_reminders=False, is_teacher=False, email=None):
         user = self.create_user(
             name=name,
             email=email,
@@ -46,6 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
+    enable_reminders = models.BooleanField(default=False)
 
     objects = UserManager()
 

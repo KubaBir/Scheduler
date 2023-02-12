@@ -29,6 +29,8 @@ def register_user(request):
         username = request.POST['username']
         email = request.POST.get('email', False)
         is_teacher = request.POST.getlist('is_teacher', False) and True
+        enable_reminders = request.POST.getlist(
+            'enable_reminders', False) and True
         password1 = request.POST['password1']
         password2 = request.POST['password2']
 
@@ -45,10 +47,10 @@ def register_user(request):
 
         if email:
             user = get_user_model().objects.create_user(
-                name=username, email=email, password=password1, is_teacher=is_teacher)
+                name=username, email=email, password=password1, is_teacher=is_teacher, enable_reminders=enable_reminders)
         else:
             user = get_user_model().objects.create_user(
-                name=username, password=password1, is_teacher=is_teacher)
+                name=username, password=password1, is_teacher=is_teacher, enable_reminders=enable_reminders)
         user.save()
         messages.success(request, 'Account creation successful.')
         return redirect('authentication:login')

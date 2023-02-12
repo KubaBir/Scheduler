@@ -1,4 +1,5 @@
 from core.models import Availability
+from core.tasks import notify_teacher_canceled_lesson
 from django.contrib import messages
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
@@ -60,3 +61,17 @@ class ListMyLessons(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Availability.objects.filter(Q(teacher=self.request.user) | Q(student=self.request.user))
+
+
+class CancelLesson(UpdateView):
+    model = Availability
+    form_class = JoinLessonForm
+    template_name = 'lessons/cancel.html'
+    success_url = reverse_lazy('lessons:booked')
+
+    def form_valid(self, form):
+        form.instance.is_booked = False
+        form.instance.student = None
+        notify_teacher_canceled_lesson.delay(
+            form.instance.date, form.instance.time, form.instance.teacher.email)
+        return super().form_valid(form)

@@ -23,7 +23,7 @@ def send_notifications():
     send_to = set()
 
     for user in users:
-        if not user.email:
+        if not user.email or not user.enable_reminders:
             continue
         lessons = Availability.objects.filter(
             Q(teacher=user) | Q(student=user))
@@ -33,3 +33,9 @@ def send_notifications():
 
     for user in send_to:
         print(f"### Mock Sending email to {user.email} ###")
+
+
+@shared_task()
+def notify_teacher_canceled_lesson(date, time, teacher):
+    content = f"Your lesson on {date[:10]} at {time[:2]} has been canceled."
+    print("###", content, "###", sep='')

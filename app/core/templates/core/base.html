@@ -25,9 +25,9 @@
             </ul>
             <span class="navbar-text">
               {% if user.is_authenticated %}
-              <a href="{% url 'authentication:logout' %}">Logout</a>
+              <a class="fs-5 text-decoration-none mx-2" href="{% url 'authentication:logout' %}">Logout</a>
               {% else %}
-              <a href="{% url 'authentication:login' %}">Login</a>
+              <a class="fs-5 text-decoration-none mx-2" href="{% url 'authentication:login' %}">Login</a>
               {% endif %}
           
             </span>
