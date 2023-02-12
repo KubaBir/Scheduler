@@ -3,5 +3,6 @@ Web App designend with driving schools in mind. Teachers can post when they are 
 ## This project uses:
 - Django
 - Docker
+- Celery
 ## Test usage:
 Create a teacher account first and post example lesson dates. Then on a student account book chosen meetings.
